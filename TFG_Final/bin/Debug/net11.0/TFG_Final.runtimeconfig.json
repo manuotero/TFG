@@ -1,0 +1,14 @@
+{
+  "runtimeOptions": {
+    "tfm": "net11.0",
+    "rollForward": "Major",
+    "framework": {
+      "name": "Microsoft.NETCore.App",
+      "version": "11.0.0-rc.1.26425.128"
+    },
+    "configProperties": {
+      "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": false,
+      "System.Runtime.TieredCompilation": false
+    }
+  }
+}

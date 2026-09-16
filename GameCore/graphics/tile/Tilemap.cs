@@ -60,7 +60,6 @@ public class Tilemap
 
     private readonly Tileset _tileset;
     private readonly int[] _tiles;
-    private readonly Floor _floor;
 
     public int Rows {get;}
 
