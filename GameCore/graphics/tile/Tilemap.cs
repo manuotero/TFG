@@ -19,6 +19,19 @@ public class Tilemap
         Count = Columns * Rows;
         Scale = Vector2.One;
         _tiles = tilemap;
+        _numberAtlas = 1;
+    }
+
+    public Tilemap(Tileset tl1, Tileset tl2, int columns, int rows, (int, int)[] tilemap)
+    {
+        _tileset = tl1;
+        _tileset2 = tl2;
+        Rows = rows;
+        Columns = columns;
+        Count = Columns * Rows;
+        Scale = Vector2.One;
+        _tiles2 = tilemap;
+        _numberAtlas = 2;
     }
 
     public void SetTile(int index, int tilesetID)
@@ -45,21 +58,50 @@ public class Tilemap
 
     public void Draw(SpriteBatch spriteBatch)
     {
-        for (int i = 0; i < Count; i++)
+        if (_numberAtlas == 1)
         {
-            int tilesetIndex = _tiles[i];
-            TextureRegion tile = _tileset.GetTile(tilesetIndex);
+            for (int i = 0; i < Count; i++)
+            {
+                int tilesetIndex = _tiles[i];
+                TextureRegion tile = _tileset.GetTile(tilesetIndex);
 
-            int x = i % Columns;
-            int y = i / Columns;
+                int x = i % Columns;
+                int y = i / Columns;
 
-            Vector2 position = new Vector2(x * TileWidth, y * TileHeight);
-            tile.Draw(spriteBatch, position, Color.White, 0.0f, Vector2.Zero, Scale, SpriteEffects.None, 1.0f);
+                Vector2 position = new Vector2(x * TileWidth, y * TileHeight);
+                tile.Draw(spriteBatch, position, Color.White, 0.0f, Vector2.Zero, Scale, SpriteEffects.None, 1.0f);
+            }
+        }
+        else
+        {
+            for(int i = 0; i < Count; i++)
+            {
+                int atlasIndex = _tiles2[i].Item1;
+                int tilesetIndex = _tiles2[i].Item2;
+                TextureRegion tile;
+                if (atlasIndex == 0)
+                {
+                    tile = _tileset.GetTile(tilesetIndex);
+                }
+                else
+                {
+                    tile = _tileset2.GetTile(tilesetIndex);
+                }
+
+                int x = i % Columns;
+                int y = i / Columns;
+
+                Vector2 position = new Vector2(x * TileWidth, y * TileHeight);
+                tile.Draw(spriteBatch, position, Color.White, 0.0f, Vector2.Zero, Scale, SpriteEffects.None, 1.0f);
+            }
         }
     }
 
     private readonly Tileset _tileset;
+    private readonly Tileset _tileset2;
     private readonly int[] _tiles;
+    private readonly (int, int)[] _tiles2;
+    private readonly int _numberAtlas;
 
     public int Rows {get;}
 

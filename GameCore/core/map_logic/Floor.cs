@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class Floor
 {
-    public Floor(int seed, int columns, int rows, int alg)
+    public Floor(int seed, int columns, int rows, int alg, int specialTile)
     {
         tileset = new Tile[columns, rows];
         Columns = columns;
@@ -19,16 +19,21 @@ public class Floor
             }
         }
 
+        List<(int, int)> roomCenters;
+
         switch (alg)
         {
-            case 1: Alg1(seed);
+            case 0: roomCenters = Alg1(seed);
+                    SpecialTerrainGenerator(seed, specialTile);
             break;
-            default:
+            default: roomCenters = Alg1(seed);
             break;
         }
+
+        PathGenerator(roomCenters);
     }
 
-    public int[] GenerateTilemap()
+    public int[] GenerateSimpleTilemap()
     {
         int[] tilemap = new int[Count];
         int index = 0;
@@ -42,7 +47,7 @@ public class Floor
                 switch(tileType)
                 {
                     case TileType.GROUND:
-                        tilemap[index] = 01;
+                        tilemap[index] = 16;
                         break;
 
                     default:
@@ -53,11 +58,40 @@ public class Floor
                 index++;
             }
         }
-
         return tilemap;
     }
 
-    private void Alg1(int seed)
+    public (int, int)[] GenerateComplexTilemap()
+    {
+        (int, int)[] tilemap = new (int, int)[Count];
+        int index = 0;
+        
+        for(int y = 0; y < tileset.GetLength(1); y++)
+        {
+            for(int x = 0; x < tileset.GetLength(0); x++)
+            {
+                var tileType = tileset[x, y].GetTileType();
+
+                switch(tileType)
+                {
+                    case TileType.GROUND:
+                        tilemap[index] = (0, 16);
+                        break;
+                    case TileType.WALL:
+                        tilemap[index] = (0, TileAdjacency(x, y, tileType));
+                        break;
+                    default:
+                        tilemap[index] = (1, TileAdjacency(x, y, tileType));
+                        break;
+                } 
+
+                index++;
+            }
+        }
+        return tilemap;
+    }
+
+    private List<(int, int)> Alg1(int seed)
     {
         List<(int, int)> roomCenter = new List<(int, int)>();
 
@@ -111,8 +145,37 @@ public class Floor
                 roomPos.Item2++;
             }   
         }
+        return roomCenter;
+    }
 
-        PathGenerator(roomCenter);
+    private void SpecialTerrainGenerator(int seed, int tileType)
+    {
+        Random rnd = new Random(seed);
+        int rndGen = rnd.Next(100, 120);
+
+        for (int x = 0; x < rndGen; x++)
+        {
+            int rndSize = rnd.Next(8, 15);
+            (int x, int y) startPoint = (rnd.Next(0, Columns - rndSize), 
+                                    rnd.Next(0, Rows - rndSize));
+            (int x, int y) endPoint = (startPoint.Item1 + rndSize,
+                                    startPoint.Item2 + rndSize);
+            
+            for (int b = startPoint.y; b < endPoint.y; b++)
+            {
+                for (int a = startPoint.x; a < endPoint.x; a++)
+                {
+                    if (tileset[a, b].GetTileType() != TileType.GROUND)
+                    {
+                        int genTile = rnd.Next(0, 10);
+                        if (genTile > 1)
+                        {
+                            tileset[a, b].setTileType(tileType);   
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private void PathGenerator(List<(int, int)> roomCenter)
@@ -134,9 +197,9 @@ public class Floor
         }else
             return tileset[x, y].GetTileType();
     }
+
     private int TileAdjacency(int x, int y, TileType tile)
-    {
-        
+    {  
         int count = 0;
         var upper = GetTileTypeAt(x, y - 1);
         var under = GetTileTypeAt(x, y + 1);
@@ -160,71 +223,7 @@ public class Floor
             count += 8;
         }
 
-        switch (count)
-        {
-            //Up
-            case 1:
-                return 09;
-            
-            //Down
-            case 2:
-                return 07;
-            
-            //Up down
-            case 3:
-                return 13;
-
-            //Right
-            case 4:
-                return 08;
-            
-            //Up right
-            case 5:
-                return 04;
-
-            //Under rigth
-            case 6:
-                return 03;
-
-            //U left
-            case 7:
-                return 16;
-
-            //Left
-            case 8:
-                return 10;
-
-            //Left up
-            case 9:
-                return 05;
-
-            //Left down
-            case 10:
-                return 06;
-
-            //U right
-            case 11:
-                return 14;
-
-            //Rigth left
-            case 12:
-                return 12;
-
-            //Reverse u
-            case 13:
-                return 00;
-
-            //U
-            case 14:
-                return 15;
-
-            //All
-            case 15:
-                return 02;
-
-            default:
-                return 11;
-        }
+        return count;
     }
 
     private Tile[,] tileset {get;}

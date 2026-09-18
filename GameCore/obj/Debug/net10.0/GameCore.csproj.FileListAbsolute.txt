@@ -1,0 +1,14 @@
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\bin\Debug\net10.0\GameCore.deps.json
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\bin\Debug\net10.0\GameCore.dll
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\bin\Debug\net10.0\GameCore.pdb
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\obj\Debug\net10.0\GameCore.csproj.AssemblyReference.cache
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\obj\Debug\net10.0\GameCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\obj\Debug\net10.0\GameCore.AssemblyInfoInputs.cache
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\obj\Debug\net10.0\GameCore.AssemblyInfo.cs
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\obj\Debug\net10.0\GameCore.csproj.CoreCompileInputs.cache
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\obj\Debug\net10.0\GameCore.sourcelink.json
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\obj\Debug\net10.0\GameCore.dll
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\obj\Debug\net10.0\refint\GameCore.dll
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\obj\Debug\net10.0\GameCore.pdb
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\obj\Debug\net10.0\ref\GameCore.dll
+C:\Users\manue\Documents\TFG_2026\TFG_Final\GameCore\obj\Debug\net10.0\GameCore.csproj.Up2Date

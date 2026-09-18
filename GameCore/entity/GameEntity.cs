@@ -1,13 +1,10 @@
-
-
-
 using System;
+using System.Text;
 
-public class Entity
+public class GameEntity
 {
 
-    public Entity(String name, 
-                    String file,
+    public GameEntity(String name,
                     int bHp,
                     int bMl,
                     int bRg,
@@ -28,6 +25,20 @@ public class Entity
         Level = level;
     }
 
+    override public String ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("Name: " + EntName).AppendLine();
+        sb.Append("Base HP: " + _baseHp).Append(", Total HP: " + MaxHp).AppendLine();
+        sb.Append("Base ML:" + _baseMl).Append(", Total ML: " + Ml).AppendLine();
+        sb.Append("Base Rg:" + _baseRg).Append(", Total Rg: " + Rg).AppendLine();
+        sb.Append("Base Pa:" + _baseMl).Append(", Total Pa: " + Pa).AppendLine();
+        sb.Append("Base Ba:" + _baseMl).Append(", Total Ba: " + Ba).AppendLine();
+        sb.Append("Base In:" + _baseMl).Append(", Total In: " + In).AppendLine();
+
+        return sb.ToString();
+    }
+
     public String EntName {get; set;}
 
     private int _baseHp {get; init;}
@@ -39,7 +50,7 @@ public class Entity
     private int[] _spriteSet {get; init;} 
 
     public int Level {get; set;}
-    public int MaxHp => (int)(_baseHp * Level * 0.5);
+    public int MaxHp => (int)(_baseHp * Level * 0.025);
     public int ActHp {get; set;}
     public int Ml => (int)(_baseMl * Level * 0.02 * MlMod);
     public int Rg => (int)(_baseRg * Level * 0.02 * RGMod);

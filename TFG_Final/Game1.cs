@@ -44,18 +44,31 @@ public class Game1 : Core
     protected override void LoadContent()
     {
         base.LoadContent();
-        
-        Texture2D atlasTexture = Content.Load<Texture2D>("images/placeholder/atlas_placeholder");
+        //Suelo simple
+        /*Texture2D atlasTexture = Content.Load<Texture2D>("images/placeholder/floor_placeholder");
 
         TextureRegion region = new TextureRegion(atlasTexture, 0, 0, atlasTexture.Width, atlasTexture.Height);
 
         Tileset tileset = new Tileset(region, 16, 16);
 
         Random rnd = new Random();
-        Floor nFloor = new Floor(rnd.Next(), 128, 64, 1);
+        Floor nFloor = new Floor(rnd.Next(), 128, 64, 1, 1);*/
 
-        _tilemap = new Tilemap(tileset, 128, 64, nFloor.GenerateTilemap());
-        float mapWidth = 128 * 16; 
+        //Con agua
+        Texture2D floorAtlasTexture = Content.Load<Texture2D>("images/placeholder/floor_placeholder");
+        Texture2D waterAtlasTexture = Content.Load<Texture2D>("images/placeholder/water_placeholder");
+
+        TextureRegion floorRegion = new TextureRegion(floorAtlasTexture, 0, 0, floorAtlasTexture.Width, floorAtlasTexture.Height);
+        TextureRegion waterRegion = new TextureRegion(waterAtlasTexture, 0, 0, waterAtlasTexture.Width, waterAtlasTexture.Height);
+
+        Tileset floorTileset = new Tileset(floorRegion, 16, 16);
+        Tileset waterTileset = new Tileset(waterRegion, 16, 16);
+        
+        Random rnd = new Random();
+        Floor nFloor = new Floor(rnd.Next(), 128, 64, 0, 1);
+
+        _tilemap = new Tilemap(floorTileset, waterTileset, 128, 64, nFloor.GenerateComplexTilemap());
+        /*float mapWidth = 128 * 16; 
         float mapHeight = 64 * 16;
 
         // 4. Calcular y aplicar la escala
@@ -63,7 +76,7 @@ public class Game1 : Core
         float scaley = GraphicsDevice.Viewport.Height / mapHeight;
         float fitScale = Math.Min(scalex, scaley);
 
-_tilemap.Scale = new Vector2(fitScale, fitScale);
+        _tilemap.Scale = new Vector2(fitScale, fitScale);*/
     }
 
     protected override void Update(GameTime gameTime)
