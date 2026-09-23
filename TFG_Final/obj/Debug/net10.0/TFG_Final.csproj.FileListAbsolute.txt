@@ -43,3 +43,6 @@ C:\Users\manue\Documents\TFG_2026\TFG_Final\TFG_Final\bin\Debug\net10.0\Content\
 C:\Users\manue\Documents\TFG_2026\TFG_Final\TFG_Final\bin\Debug\net10.0\Content\images\placeholder\water_placeholder.xnb
 C:\Users\manue\Documents\TFG_2026\TFG_Final\TFG_Final\bin\Debug\net10.0\Content\images\placeholder\floor_placeholder.xml
 C:\Users\manue\Documents\TFG_2026\TFG_Final\TFG_Final\bin\Debug\net10.0\Content\images\placeholder\water_placeholder.xml
+C:\Users\manue\Documents\TFG_2026\TFG_Final\TFG_Final\bin\Debug\net10.0\Content\images\placeholder\player_placeholder.xnb
+C:\Users\manue\Documents\TFG_2026\TFG_Final\TFG_Final\bin\Debug\net10.0\Content\images\placeholder\player_placeholder.xml
+C:\Users\manue\Documents\TFG_2026\TFG_Final\TFG_Final\bin\Debug\net10.0\Content\bin\DesktopGL\Content\images\placeholder\player_placeholder.xml

@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
+using GameCore.Graphics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,12 +15,14 @@ public class TextureAtlas
     public TextureAtlas()
     {
         _regions = new Dictionary<string, TextureRegion>();
+        _animations = new Dictionary<string, Animation>();
     }
 
     public TextureAtlas(Texture2D texture)
     {
         Texture = texture;
         _regions = new Dictionary<string, TextureRegion>();
+        _animations = new Dictionary<string, Animation>();
     }
 
     public void AddRegion(string name, int x, int y, int width, int height)
@@ -35,6 +39,33 @@ public class TextureAtlas
     public void Clear()
     {
         _regions.Clear();
+    }
+
+    public void AddAnimation(string name, Animation animation)
+    {
+        _animations.Add(name, animation);
+    }
+
+    public Animation GetAnimation(string name)
+    {
+        return _animations[name];
+    }
+
+    public bool RemoveAnimation(string name)
+    {
+        return _animations.Remove(name);
+    }
+
+    public Sprite CreateSprite(string regionName)
+    {
+        TextureRegion region = GetRegion(regionName);
+        return new Sprite(region);
+    }
+
+    public AnimatedSprite CreateAnimatedSprite(string animationName)
+    {
+        Animation animation = GetAnimation(animationName);
+        return new AnimatedSprite(animation);
     }
 
     public static TextureAtlas FromFile(ContentManager content, string fileName)
@@ -72,12 +103,42 @@ public class TextureAtlas
                     }
                 }
 
+                var animations = root.Element("Animations").Elements("Animation");
+
+                if (animations != null)
+                {
+                    foreach(var animation in animations)
+                    {
+                        string name = animation.Attribute("name")?.Value;
+                        float delayMs = float.Parse(animation.Attribute("delay")?.Value ?? "0");
+                        TimeSpan delay = TimeSpan.FromMilliseconds(delayMs);
+
+                        List<TextureRegion> frames = new List<TextureRegion>();
+
+                        var frameElements = animation.Elements("Frame");
+
+                        if (frameElements != null)
+                        {
+                            foreach(var frameElement in frameElements)
+                            {
+                                string regionName = frameElement.Attribute("region").Value;
+                                TextureRegion region = atlas.GetRegion(regionName);
+                                frames.Add(region);
+                            }
+                        }
+
+                        Animation newAnimation = new Animation(frames, delay);
+                        atlas.AddAnimation(name, newAnimation);
+                    }
+                }
+
                 return atlas;
             }
         }
     }
 
     private Dictionary<string, TextureRegion> _regions;
+    private Dictionary<string, Animation> _animations;
 
     public Texture2D Texture {get; set;}
 }

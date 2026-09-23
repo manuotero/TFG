@@ -5,9 +5,11 @@
   <Config />
   <SourceFiles>
     <File>C:/Users/manue/Documents/TFG_2026/TFG_Final/TFG_Final/Content/images/placeholder/floor_placeholder.png</File>
+    <File>C:/Users/manue/Documents/TFG_2026/TFG_Final/TFG_Final/Content/images/placeholder/player_placeholder.png</File>
     <File>C:/Users/manue/Documents/TFG_2026/TFG_Final/TFG_Final/Content/images/placeholder/water_placeholder.png</File>
   </SourceFiles>
   <DestFiles>
+    <File xsi:nil="true" />
     <File xsi:nil="true" />
     <File xsi:nil="true" />
   </DestFiles>

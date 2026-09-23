@@ -26,6 +26,22 @@
 /processorParam:Version=3.8.5.0
 /build:images/placeholder/floor_placeholder.png
 
+#begin images/placeholder/player_placeholder.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/processorParam:Version=3.8.5.0
+/build:images/placeholder/player_placeholder.png
+
+#begin images/placeholder/player_placeholder.xml
+/copy:images/placeholder/player_placeholder.xml
+
 #begin images/placeholder/water_placeholder.png
 /importer:TextureImporter
 /processor:TextureProcessor

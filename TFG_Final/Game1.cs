@@ -19,6 +19,9 @@ public class Game1 : Core
     private Rectangle _floorBounds;
 
     private Texture2D _logo;
+    private readonly int tileSize = 16;
+
+    private AnimatedSprite _player;
 
     public Game1() : base("Mech_Game", 1280, 720, false)
     {
@@ -54,22 +57,29 @@ public class Game1 : Core
         Random rnd = new Random();
         Floor nFloor = new Floor(rnd.Next(), 128, 64, 1, 1);*/
 
+        TextureAtlas playerAtlas = TextureAtlas.FromFile(Content, "images/placeholder/player_placeholder.xml");
+        _player = playerAtlas.CreateAnimatedSprite("player_down_idle");
+
         //Con agua
         Texture2D floorAtlasTexture = Content.Load<Texture2D>("images/placeholder/floor_placeholder");
         Texture2D waterAtlasTexture = Content.Load<Texture2D>("images/placeholder/water_placeholder");
-
+       
+        
         TextureRegion floorRegion = new TextureRegion(floorAtlasTexture, 0, 0, floorAtlasTexture.Width, floorAtlasTexture.Height);
         TextureRegion waterRegion = new TextureRegion(waterAtlasTexture, 0, 0, waterAtlasTexture.Width, waterAtlasTexture.Height);
+       
 
-        Tileset floorTileset = new Tileset(floorRegion, 16, 16);
-        Tileset waterTileset = new Tileset(waterRegion, 16, 16);
+        Tileset floorTileset = new Tileset(floorRegion, tileSize, tileSize);
+        Tileset waterTileset = new Tileset(waterRegion, tileSize, tileSize);
+
         
         Random rnd = new Random();
         Floor nFloor = new Floor(rnd.Next(), 128, 64, 0, 1);
 
         _tilemap = new Tilemap(floorTileset, waterTileset, 128, 64, nFloor.GenerateComplexTilemap());
-        /*float mapWidth = 128 * 16; 
-        float mapHeight = 64 * 16;
+
+        /*float mapWidth = 128 * tileSize; 
+        float mapHeight = 64 * tileSize;
 
         // 4. Calcular y aplicar la escala
         float scalex = GraphicsDevice.Viewport.Width / mapWidth;
@@ -77,6 +87,8 @@ public class Game1 : Core
         float fitScale = Math.Min(scalex, scaley);
 
         _tilemap.Scale = new Vector2(fitScale, fitScale);*/
+
+        
     }
 
     protected override void Update(GameTime gameTime)
@@ -85,6 +97,8 @@ public class Game1 : Core
             Exit();
 
         // TODO: Add your update logic here
+
+        _player.Update(gameTime);
 
         base.Update(gameTime);
     }
@@ -96,8 +110,8 @@ public class Game1 : Core
         // TODO: Add your drawing code here
 
         SpriteBatch.Begin();
-        //SpriteBatch.Draw(_logo, Vector2.Zero, Color.White);
         _tilemap.Draw(SpriteBatch);
+        _player.Draw(SpriteBatch, Vector2.Zero);
         SpriteBatch.End();
 
 
