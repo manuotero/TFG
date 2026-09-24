@@ -2,11 +2,13 @@
 
 using System;
 using System.Collections.Generic;
+using GameCore.Graphics;
 
 public class Floor
 {
-    public Floor(int seed, int columns, int rows, int alg, int specialTile)
+    public Floor(int seed, int columns, int rows, int alg)
     {
+        rnd = new Random(seed);
         tileset = new Tile[columns, rows];
         Columns = columns;
         Rows = rows;
@@ -23,42 +25,45 @@ public class Floor
 
         switch (alg)
         {
-            case 0: roomCenters = Alg1(seed);
-                    SpecialTerrainGenerator(seed, specialTile);
+            case 0: roomCenters = Alg1();
             break;
-            default: roomCenters = Alg1(seed);
+            default: roomCenters = Alg1();
             break;
         }
-
         PathGenerator(roomCenters);
     }
 
-    public int[] GenerateSimpleTilemap()
+    public Floor(int seed, int columns, int rows, int alg, List<int> specialTiles)
     {
-        int[] tilemap = new int[Count];
-        int index = 0;
-
-        for(int y = 0; y < tileset.GetLength(1); y++)
+        rnd = new Random(seed);
+        tileset = new Tile[columns, rows];
+        Columns = columns;
+        Rows = rows;
+        
+        for(int i = 0; i < tileset.GetLength(1); i++)
         {
-            for(int x = 0; x < tileset.GetLength(0); x++)
+            for(int j = 0; j < tileset.GetLength(0); j++)
             {
-                var tileType = tileset[x, y].GetTileType();
-
-                switch(tileType)
-                {
-                    case TileType.GROUND:
-                        tilemap[index] = 16;
-                        break;
-
-                    default:
-                        tilemap[index] = TileAdjacency(x, y, tileType);
-                        break;
-                } 
-
-                index++;
+                tileset[j, i] = new Tile(3);
             }
         }
-        return tilemap;
+
+        List<(int, int)> roomCenters;
+
+        switch (alg)
+        {
+            case 0: roomCenters = Alg1();    
+            break;
+            default: roomCenters = Alg1();
+            break;
+        }
+        
+        foreach(int tile in specialTiles)
+        {
+            SpecialTerrainGenerator(tile);
+        }
+
+        PathGenerator(roomCenters);
     }
 
     public (int, int)[] GenerateComplexTilemap()
@@ -77,11 +82,17 @@ public class Floor
                     case TileType.GROUND:
                         tilemap[index] = (0, 16);
                         break;
+                    case TileType.HALLWAY:
+                        tilemap[index] = (0, 16);
+                        break;
                     case TileType.WALL:
                         tilemap[index] = (0, TileAdjacency(x, y, tileType));
                         break;
-                    default:
+                    case TileType.WATER:
                         tilemap[index] = (1, TileAdjacency(x, y, tileType));
+                        break;
+                    default:
+                        tilemap[index] = (2, TileAdjacency(x, y, tileType));
                         break;
                 } 
 
@@ -91,11 +102,24 @@ public class Floor
         return tilemap;
     }
 
-    private List<(int, int)> Alg1(int seed)
+    public (int x, int y) GenerateSpawnPoint()
+    {
+        int check = 0;
+        (int x, int y) point = (0, 0);
+        while (check == 0)
+        {
+            point = (rnd.Next(0, Columns - 1), rnd.Next(0, Rows - 1));
+            if (tileset[point.x, point.y].GetTileType() == TileType.GROUND)
+            {
+                check = 1;
+            }
+        }
+        return point;
+    }
+
+    private List<(int, int)> Alg1()
     {
         List<(int, int)> roomCenter = new List<(int, int)>();
-
-        Random rnd = new Random(seed);
 
         int roomNum = rnd.Next(5, 10);
 
@@ -148,9 +172,8 @@ public class Floor
         return roomCenter;
     }
 
-    private void SpecialTerrainGenerator(int seed, int tileType)
+    private void SpecialTerrainGenerator(int tileType)
     {
-        Random rnd = new Random(seed);
         int rndGen = rnd.Next(100, 120);
 
         for (int x = 0; x < rndGen; x++)
@@ -165,7 +188,8 @@ public class Floor
             {
                 for (int a = startPoint.x; a < endPoint.x; a++)
                 {
-                    if (tileset[a, b].GetTileType() != TileType.GROUND)
+                    if (tileset[a, b].GetTileType() != TileType.GROUND &&
+                    tileset[a, b].GetTileType() != TileType.HALLWAY)
                     {
                         int genTile = rnd.Next(0, 10);
                         if (genTile > 1)
@@ -185,7 +209,7 @@ public class Floor
         foreach(var point in pathList)
         {
             if (tileset[point.Item1, point.Item2].GetTileType() != TileType.GROUND)
-                tileset[point.Item1, point.Item2].setTileType(0);
+                tileset[point.Item1, point.Item2].setTileType(4);
         }
     }
 
@@ -226,6 +250,7 @@ public class Floor
         return count;
     }
 
+    private Random rnd {get; init;}
     private Tile[,] tileset {get;}
     private int Columns {get;}
     private int Rows {get;}

@@ -25,7 +25,66 @@ public class GameEntity
         Level = level;
     }
 
-    public (int, int) SpriteLocation(int size)
+    public GameEntity(String name, String file)
+    {
+        EntName = name;
+        SpriteFile = file;
+    }
+
+    public void SetInitPos((int x, int y) point)
+    {
+        ActPos = point;
+    }
+
+    public void UpdatePos(int direction)
+    {
+        switch (direction)
+        {
+            case 0:
+                ActPos.x++;
+            break;
+            
+            case 1:
+                ActPos.y++;
+            break;
+            
+            case 2:
+                ActPos.x--;
+            break;
+            
+            case 3:
+                ActPos.y--;
+            break;
+            
+            case 4:
+                ActPos.x++;
+                ActPos.y++;
+            break;
+            
+            case 5:
+                ActPos.x--;
+                ActPos.y--;
+            break;
+            
+            case 6:
+                ActPos.x++;
+                ActPos.y--;
+            break;
+            
+            default:
+                ActPos.x--;
+                ActPos.y++;
+            break;
+        
+        }
+    }
+
+    public (int x, int y) GetPos()
+    {
+        return ActPos;
+    }
+
+    public (float, float) SpriteLocation(int size)
     {
         return (size * ActPos.x, size * ActPos.y);
     }
@@ -45,7 +104,7 @@ public class GameEntity
     }
 
     public String EntName {get; set;}
-    private readonly String SpriteFile;
+    public readonly String SpriteFile;
     private int _baseHp {get; init;}
     private int _baseMl {get; init;}
     private int _baseRg {get; init;}
@@ -68,7 +127,7 @@ public class GameEntity
     public float BaMod = 1;
     public float InMod = 1;
 
-    public (int x, int y) ActPos {get; set;}
+    private (int x, int y) ActPos;
 
     /*
     Lista de ataques

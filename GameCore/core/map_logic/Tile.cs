@@ -29,6 +29,9 @@ public class Tile
                 tileType = TileType.WALL;
             break;
 
+            case 4:
+                tileType = TileType.HALLWAY;
+            break;         
             default:
                 tileType = TileType.VOID;
             break;
@@ -55,5 +58,6 @@ public enum TileType
     WATER,
     AIR,
     VOID,
-    WALL
+    WALL,
+    HALLWAY
 }

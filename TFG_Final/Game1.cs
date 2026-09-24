@@ -6,6 +6,7 @@ using MonoGameLibrary.Graphics;
 using System;
 using GameCore.Graphics;
 using System.Reflection.PortableExecutable;
+using System.Collections.Generic;
 
 namespace TFG_Final;
 
@@ -22,6 +23,7 @@ public class Game1 : Core
     private readonly int tileSize = 16;
 
     private AnimatedSprite _player;
+    private (float x, float y) _playerPos;
 
     public Game1() : base("Mech_Game", 1280, 720, false)
     {
@@ -47,37 +49,27 @@ public class Game1 : Core
     protected override void LoadContent()
     {
         base.LoadContent();
-        //Suelo simple
-        /*Texture2D atlasTexture = Content.Load<Texture2D>("images/placeholder/floor_placeholder");
 
-        TextureRegion region = new TextureRegion(atlasTexture, 0, 0, atlasTexture.Width, atlasTexture.Height);
-
-        Tileset tileset = new Tileset(region, 16, 16);
+        List<int> tiles = new List<int>();
+        tiles.Add(1);
 
         Random rnd = new Random();
-        Floor nFloor = new Floor(rnd.Next(), 128, 64, 1, 1);*/
-
-        TextureAtlas playerAtlas = TextureAtlas.FromFile(Content, "images/placeholder/player_placeholder.xml");
-        _player = playerAtlas.CreateAnimatedSprite("player_down_idle");
-
-        //Con agua
-        Texture2D floorAtlasTexture = Content.Load<Texture2D>("images/placeholder/floor_placeholder");
-        Texture2D waterAtlasTexture = Content.Load<Texture2D>("images/placeholder/water_placeholder");
-       
+        Floor nFloor = new Floor(rnd.Next(), 128, 64, 0, tiles);
+        GameEntity player = new GameEntity("Player", "images/placeholder/player_placeholder.xml");
+        player.SetInitPos(nFloor.GenerateSpawnPoint());
         
-        TextureRegion floorRegion = new TextureRegion(floorAtlasTexture, 0, 0, floorAtlasTexture.Width, floorAtlasTexture.Height);
-        TextureRegion waterRegion = new TextureRegion(waterAtlasTexture, 0, 0, waterAtlasTexture.Width, waterAtlasTexture.Height);
-       
-
-        Tileset floorTileset = new Tileset(floorRegion, tileSize, tileSize);
-        Tileset waterTileset = new Tileset(waterRegion, tileSize, tileSize);
-
+        _playerPos = player.SpriteLocation(tileSize);
         
-        Random rnd = new Random();
-        Floor nFloor = new Floor(rnd.Next(), 128, 64, 0, 1);
+        TextureLoader PlayerLoader = new TextureLoader(Content, player.SpriteFile);
+        _player = PlayerLoader.LoadEntity("player_down_idle");
 
-        _tilemap = new Tilemap(floorTileset, waterTileset, 128, 64, nFloor.GenerateComplexTilemap());
+        List<string> filenames = new List<string>();
+        filenames.Add("images/placeholder/floor_placeholder");
+        filenames.Add("images/placeholder/water_placeholder");
 
+        TextureLoader MapLoader = new TextureLoader(Content, filenames);
+
+        _tilemap = MapLoader.LoadTileMap(tileSize, 128, 64, nFloor.GenerateComplexTilemap());
         /*float mapWidth = 128 * tileSize; 
         float mapHeight = 64 * tileSize;
 
@@ -111,9 +103,8 @@ public class Game1 : Core
 
         SpriteBatch.Begin();
         _tilemap.Draw(SpriteBatch);
-        _player.Draw(SpriteBatch, Vector2.Zero);
+        _player.Draw(SpriteBatch, new Vector2(_playerPos.x, _playerPos.y));
         SpriteBatch.End();
-
 
         base.Draw(gameTime);
     }
