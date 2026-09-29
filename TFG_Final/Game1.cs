@@ -70,17 +70,6 @@ public class Game1 : Core
         TextureLoader MapLoader = new TextureLoader(Content, filenames);
 
         _tilemap = MapLoader.LoadTileMap(tileSize, 128, 64, nFloor.GenerateComplexTilemap());
-        /*float mapWidth = 128 * tileSize; 
-        float mapHeight = 64 * tileSize;
-
-        // 4. Calcular y aplicar la escala
-        float scalex = GraphicsDevice.Viewport.Width / mapWidth;
-        float scaley = GraphicsDevice.Viewport.Height / mapHeight;
-        float fitScale = Math.Min(scalex, scaley);
-
-        _tilemap.Scale = new Vector2(fitScale, fitScale);*/
-
-        
     }
 
     protected override void Update(GameTime gameTime)
